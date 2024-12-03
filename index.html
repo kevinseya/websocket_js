@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cliente WebSocket</title>
+</head>
+<body>
+  <h1>Conexión WebSocket</h1>
+  <button id="connectButton">Conectar</button>
+  <div id="messages"></div>
+
+  <script>
+    let ws;
+
+    document.getElementById('connectButton').onclick = function() {
+      // Crear la conexión WebSocket
+      ws = new WebSocket('ws://localhost:8080');
+
+      // Escuchar mensajes del servidor
+      ws.onmessage = function(event) {
+        const messagesDiv = document.getElementById('messages');
+        const message = document.createElement('p');
+        message.textContent = `Servidor: ${event.data}`;
+        messagesDiv.appendChild(message);
+      };
+
+      // Manejar la apertura de la conexión
+      ws.onopen = function() {
+        console.log('Conexión abierta');
+        ws.send('¡Hola servidor!');
+      };
+
+      // Manejar el cierre de la conexión
+      ws.onclose = function() {
+        console.log('Conexión cerrada');
+      };
+    };
+  </script>
+</body>
+</html>
